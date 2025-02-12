@@ -2,16 +2,8 @@ import React, { useState } from "react";
 import CustomGridLayout from "./components/layout/GridLayout";
 import useResize from "./hooks/useResize";
 import { handleLayoutChange } from "./utils/layoutUtils";
+import { initialModules } from './utils/moduleConfig';
 import "./App.css";
-
-const initialModules = [
-  { id: 1, name: "Module A" },
-  { id: 2, name: "Module B" },
-  { id: 3, name: "Module C" },
-  { id: 4, name: "Module D" },
-  { id: 5, name: "Module E" },
-  { id: 6, name: "Module F" },
-];
 
 const App = () => {
   const [modules, setModules] = useState(initialModules);

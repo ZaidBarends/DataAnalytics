@@ -6,6 +6,7 @@ import {
   KeyMetrics,
   TimePeriodSelector,
   DataBreakdown,
+  ModuleContent,
 } from "../ui/card";
 import { Grip } from "lucide-react";
 import "react-grid-layout/css/styles.css";
@@ -36,16 +37,12 @@ const CustomGridLayout = ({ modules, columns, gridWidth, rowHeight, handleLayout
       {modules.map((module) => (
         <div key={module.id}>
           <Card className="h-full w-full flex flex-col">
-            <CardContent className="p-4 flex-grow flex flex-wrap gap-1">
-              <div className="flex items-center justify-between mb-2 w-full">
+            <CardContent className="p-4 flex-grow flex flex-col">
+              <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-white">{module.name}</h2>
                 <Grip className="drag-handle text-gray-400 cursor-move" size={20} />
               </div>
-              <div className="flex flex-wrap gap-1 w-full">
-                <KeyMetrics metrics={["Total Revenue: $100,000", "Conversion Rate: 5%"]} />
-                <TimePeriodSelector periods={["Last 7 days", "Last 30 days", "Last quarter"]} onSelect={(period) => console.log(period)} />
-                <DataBreakdown breakdowns={["Region: North America", "Device: Mobile"]} />
-              </div>
+              <ModuleContent module={module} />
             </CardContent>
           </Card>
         </div>

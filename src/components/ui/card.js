@@ -1,5 +1,7 @@
 import * as React from "react";
 import { cva, cx } from "class-variance-authority";
+import { MODULE_TYPES } from '../../utils/moduleConfig';
+import useModuleData from '../../hooks/useModuleData';
 
 const cardVariants = cva(
   "rounded-lg border text-card-foreground shadow-sm",
@@ -103,6 +105,63 @@ const DataBreakdown = ({ breakdowns }) => (
   </div>
 );
 
+const ModuleContent = ({ module }) => {
+  const { data, loading, error } = useModuleData(module);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full text-white">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-full text-red-400">
+        <p>Error: {error}</p>
+      </div>
+    );
+  }
+
+  switch (module.type) {
+    case MODULE_TYPES.METRICS:
+      return (
+        <KeyMetrics 
+          metrics={module.config.metrics.map(metric => 
+            `${metric.label}: ${data?.[metric.key] || 'N/A'}`
+          )} 
+        />
+      );
+    
+    case MODULE_TYPES.CHART:
+      return (
+        <div className="w-full h-full min-h-[200px] text-white p-4">
+          <h4 className="text-md font-semibold mb-2">Sales Data</h4>
+          <ul className="space-y-2">
+            {data?.data?.map((item, index) => (
+              <li key={index}>
+                {item.date}: {item.sales} sales
+              </li>
+            )) || 'No data available'}
+          </ul>
+        </div>
+      );
+    
+    case MODULE_TYPES.BREAKDOWN:
+      return (
+        <DataBreakdown 
+          breakdowns={Object.entries(data || {}).map(([key, value]) => 
+            `${key}: ${value}`
+          )} 
+        />
+      );
+    
+    default:
+      return null;
+  }
+};
+
 export {
   Card,
   CardHeader,
@@ -113,4 +172,5 @@ export {
   KeyMetrics,
   TimePeriodSelector,
   DataBreakdown,
+  ModuleContent,
 };
